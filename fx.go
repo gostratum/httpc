@@ -2,8 +2,8 @@ package httpc
 
 import (
 	"github.com/gostratum/core/configx"
+	"github.com/gostratum/core/logx"
 	"go.uber.org/fx"
-	"go.uber.org/zap"
 )
 
 // FxConfigParams wires config loading via fx.
@@ -18,7 +18,7 @@ type FxParams struct {
 	fx.In
 
 	Config        Config
-	Logger        *zap.Logger `optional:"true"`
+	Logger        logx.Logger `optional:"true"`
 	CustomOptions []Option    `group:"httpc_options"`
 }
 

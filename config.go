@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"github.com/gostratum/core/configx"
+	"github.com/gostratum/core/logx"
 	"github.com/gostratum/httpc/auth"
 	"github.com/gostratum/httpc/breaker"
 	"github.com/gostratum/httpc/retry"
-	"go.uber.org/zap"
 )
 
 // Config describes the runtime configuration for the HTTP client. It is
@@ -52,7 +52,7 @@ type Config struct {
 
 	// Runtime-only fields set via functional options (ignored by config loader).
 	Transport   http.RoundTripper `mapstructure:"-"`
-	Logger      *zap.Logger       `mapstructure:"-"`
+	Logger      logx.Logger       `mapstructure:"-"`
 	DefaultAuth auth.AuthProvider `mapstructure:"-"`
 	RetryPolicy retry.Policy      `mapstructure:"-"`
 	Breaker     breaker.Manager   `mapstructure:"-"`

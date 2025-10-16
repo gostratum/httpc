@@ -12,7 +12,7 @@ import (
 	"sync"
 	"time"
 
-	"go.uber.org/zap"
+	"github.com/gostratum/core/logx"
 )
 
 // Policy determines if and when a request should be retried.
@@ -166,9 +166,9 @@ func IsForce(ctx context.Context) bool {
 }
 
 // NewMiddleware constructs a retry middleware.
-func NewMiddleware(defaultPolicy Policy, logger *zap.Logger) func(http.RoundTripper) http.RoundTripper {
+func NewMiddleware(defaultPolicy Policy, logger logx.Logger) func(http.RoundTripper) http.RoundTripper {
 	if logger == nil {
-		logger = zap.NewNop()
+		logger = logx.NewNoopLogger()
 	}
 	return func(next http.RoundTripper) http.RoundTripper {
 		return roundTripperFunc(func(req *http.Request) (*http.Response, error) {
@@ -207,9 +207,9 @@ func NewMiddleware(defaultPolicy Policy, logger *zap.Logger) func(http.RoundTrip
 					return nil, fmt.Errorf("retry interrupted: %w", err)
 				}
 				logger.Debug("retrying http request",
-					zap.String("method", req.Method),
-					zap.String("url", req.URL.String()),
-					zap.Int("attempt", attempt),
+					logx.String("method", req.Method),
+					logx.String("url", req.URL.String()),
+					logx.Int("attempt", attempt),
 				)
 			}
 		})

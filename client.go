@@ -10,10 +10,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gostratum/core/logx"
 	"github.com/gostratum/httpc/auth"
 	"github.com/gostratum/httpc/breaker"
 	"github.com/gostratum/httpc/retry"
-	"go.uber.org/zap"
 )
 
 // Client represents the public contract for the HTTP client.
@@ -94,7 +94,7 @@ func New(opts ...Option) (Client, error) {
 
 	logger := cfg.Logger
 	if logger == nil {
-		logger = zap.NewNop()
+		logger = logx.NewNoopLogger()
 	}
 
 	if cfg.UserAgent == "" {

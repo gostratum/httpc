@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gostratum/core/logx"
 	"github.com/gostratum/httpc/auth"
 	"github.com/gostratum/httpc/breaker"
 	"github.com/gostratum/httpc/retry"
-	"go.uber.org/zap"
 )
 
 // Option mutates the client configuration before a Client is constructed.
@@ -68,8 +68,8 @@ func WithHTTPClient(client *http.Client) Option {
 	}
 }
 
-// WithLogger sets the zap logger used for request logging middleware.
-func WithLogger(l *zap.Logger) Option {
+// WithLogger sets the logger used for request logging middleware.
+func WithLogger(l logx.Logger) Option {
 	return func(c *Config) {
 		c.Logger = l
 	}

@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/gostratum/core/logx"
 	"github.com/gostratum/httpc"
-	"go.uber.org/zap"
 )
 
 func TestRetriesOn503(t *testing.T) {
@@ -28,7 +28,7 @@ func TestRetriesOn503(t *testing.T) {
 	client, err := httpc.New(
 		httpc.WithBaseURL(server.URL),
 		httpc.WithTimeout(2*time.Second),
-		httpc.WithLogger(zap.NewNop()),
+		httpc.WithLogger(logx.NewNoopLogger()),
 	)
 	if err != nil {
 		t.Fatalf("new client: %v", err)

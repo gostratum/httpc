@@ -68,9 +68,9 @@ func TestJWTAuthHS256(t *testing.T) {
 		t.Fatalf("expected bearer token")
 	}
 
-	token, err := jwt.Parse(raw, func(t *jwt.Token) (any, error) {
-		if t.Method.Alg() != jwt.SigningMethodHS256.Alg() {
-			t.Fatalf("unexpected alg %s", t.Method.Alg())
+	token, err := jwt.Parse(raw, func(tok *jwt.Token) (any, error) {
+		if tok.Method.Alg() != jwt.SigningMethodHS256.Alg() {
+			t.Fatalf("unexpected alg %s", tok.Method.Alg())
 		}
 		return []byte("super-secret"), nil
 	})

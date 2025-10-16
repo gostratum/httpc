@@ -236,37 +236,37 @@ func WithQueryMap(values map[string]string) ReqOption {
 	}
 }
 
-// WithTimeout overrides the timeout for this specific request.
-func WithTimeout(d time.Duration) ReqOption {
+// WithRequestTimeout overrides the timeout for this specific request.
+func WithRequestTimeout(d time.Duration) ReqOption {
 	return func(r *Request) {
 		r.timeout = d
 	}
 }
 
-// WithAuth overrides the auth provider used for the request.
-func WithAuth(provider auth.AuthProvider) ReqOption {
+// WithRequestAuth overrides the auth provider used for the request.
+func WithRequestAuth(provider auth.AuthProvider) ReqOption {
 	return func(r *Request) {
 		r.authProvider = provider
 	}
 }
 
-// WithRetry overrides the retry policy for this request.
-func WithRetry(policy retry.Policy) ReqOption {
+// WithRequestRetry overrides the retry policy for this request.
+func WithRequestRetry(policy retry.Policy) ReqOption {
 	return func(r *Request) {
 		r.retryPolicy = policy
 	}
 }
 
-// WithRetryForce marks the request as retryable even for non-idempotent
+// WithRequestRetryForce marks the request as retryable even for non-idempotent
 // methods.
-func WithRetryForce() ReqOption {
+func WithRequestRetryForce() ReqOption {
 	return func(r *Request) {
 		r.forceRetry = true
 	}
 }
 
-// WithBreaker toggles the circuit breaker for this request.
-func WithBreaker(enabled bool) ReqOption {
+// WithRequestBreaker toggles the circuit breaker for this request.
+func WithRequestBreaker(enabled bool) ReqOption {
 	return func(r *Request) {
 		r.breakerToggle = ptr(enabled)
 	}

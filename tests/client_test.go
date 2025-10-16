@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"io"
-	"mime/multipart"
 	"net/http"
 	"strings"
 	"testing"
@@ -28,7 +27,7 @@ func (c *captureTransport) RoundTrip(req *http.Request) (*http.Response, error) 
 		StatusCode: 200,
 		Header:     make(http.Header),
 		Body:       io.NopCloser(strings.NewReader(`{"ok":true}`)),
-	}
+	}, nil
 }
 
 func TestClientJSONRequest(t *testing.T) {

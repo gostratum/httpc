@@ -106,11 +106,14 @@ func (r *Request) buildHTTPRequest(ctx context.Context, cfg Config) (*http.Reque
 	baseURL := cfg.BaseURL
 	target := r.url
 	if baseURL != "" && !isAbsoluteURL(target) {
-		target = strings.TrimRight(baseURL, "/")
-		if !strings.HasPrefix(r.url, "/") {
-			target += "/"
+		// Parse base URL to get proper URL structure
+		base, err := url.Parse(baseURL)
+		if err != nil {
+			return nil, fmt.Errorf("invalid base URL: %w", err)
 		}
-		target = target + strings.TrimLeft(r.url, "/")
+		// Join paths properly
+		base.Path = path.Join(base.Path, r.url)
+		target = base.String()
 	}
 
 	if len(r.queries) > 0 {
@@ -130,6 +133,7 @@ func (r *Request) buildHTTPRequest(ctx context.Context, cfg Config) (*http.Reque
 
 	var body io.ReadCloser
 	var contentLength int64
+	var factoryContentType string
 	if r.bodyFactory != nil {
 		rc, cl, ctype, err := r.bodyFactory()
 		if err != nil {
@@ -137,9 +141,7 @@ func (r *Request) buildHTTPRequest(ctx context.Context, cfg Config) (*http.Reque
 		}
 		body = rc
 		contentLength = cl
-		if ctype != "" {
-			r.contentType = ctype
-		}
+		factoryContentType = ctype
 	}
 
 	httpReq, err := http.NewRequestWithContext(ctx, r.method, target, body)
@@ -173,9 +175,16 @@ func (r *Request) buildHTTPRequest(ctx context.Context, cfg Config) (*http.Reque
 	if cfg.UserAgent != "" && httpReq.Header.Get("User-Agent") == "" {
 		httpReq.Header.Set("User-Agent", cfg.UserAgent)
 	}
-	if r.contentType != "" && httpReq.Header.Get("Content-Type") == "" {
-		httpReq.Header.Set("Content-Type", r.contentType)
+
+	// Set content type: user-provided r.contentType takes precedence over factory's content type
+	contentType := r.contentType
+	if contentType == "" && factoryContentType != "" {
+		contentType = factoryContentType
 	}
+	if contentType != "" && httpReq.Header.Get("Content-Type") == "" {
+		httpReq.Header.Set("Content-Type", contentType)
+	}
+
 	if r.accept != "" && httpReq.Header.Get("Accept") == "" {
 		httpReq.Header.Set("Accept", r.accept)
 	}

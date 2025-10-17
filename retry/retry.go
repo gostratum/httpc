@@ -237,11 +237,15 @@ func prepareAttemptRequest(req *http.Request, attempt int) (*http.Request, error
 		return req, nil
 	}
 
+	clone := req.Clone(req.Context())
+
+	// Handle requests with no body (like GET)
 	if req.GetBody == nil {
-		return nil, fmt.Errorf("request body not replayable for retry")
+		// For GET and other methods without a body, we can retry without issue
+		return clone, nil
 	}
 
-	clone := req.Clone(req.Context())
+	// For requests with a body, we need to get a fresh copy
 	body, err := req.GetBody()
 	if err != nil {
 		return nil, fmt.Errorf("reset body: %w", err)

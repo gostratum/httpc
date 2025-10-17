@@ -29,6 +29,7 @@ func TestRetriesOn503(t *testing.T) {
 		httpc.WithBaseURL(server.URL),
 		httpc.WithTimeout(2*time.Second),
 		httpc.WithLogger(logx.NewNoopLogger()),
+		httpc.WithRetry(true, 3), // Explicitly enable retry
 	)
 	if err != nil {
 		t.Fatalf("new client: %v", err)

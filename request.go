@@ -155,6 +155,12 @@ func (r *Request) buildHTTPRequest(ctx context.Context, cfg Config) (*http.Reque
 			rc, _, _, err := r.bodyFactory()
 			return rc, err
 		}
+	} else {
+		// For requests without a body (like GET), set GetBody to return nil
+		// This allows the retry mechanism to work properly
+		httpReq.GetBody = func() (io.ReadCloser, error) {
+			return nil, nil
+		}
 	}
 
 	// Copy headers

@@ -1,10 +1,10 @@
 module github.com/gostratum/httpc
 
-go 1.25
+go 1.25.1
 
 require (
 	github.com/golang-jwt/jwt/v5 v5.2.1
-	github.com/gostratum/core v0.1.4
+	github.com/gostratum/core v0.1.5
 	github.com/sony/gobreaker v0.5.0
 	go.uber.org/fx v1.24.0
 )

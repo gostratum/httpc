@@ -17,7 +17,7 @@ func TestResponse_DecodeJSON(t *testing.T) {
 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
-			json.NewEncoder(w).Encode(map[string]interface{}{
+			json.NewEncoder(w).Encode(map[string]any{
 				"id":   123,
 				"name": "test",
 			})
@@ -33,7 +33,7 @@ func TestResponse_DecodeJSON(t *testing.T) {
 		resp, err := client.Get(context.Background(), "/test")
 		require.NoError(t, err)
 
-		var result map[string]interface{}
+		var result map[string]any
 		err = resp.DecodeJSON(&result)
 		require.NoError(t, err)
 		assert.Equal(t, float64(123), result["id"])
@@ -57,7 +57,7 @@ func TestResponse_DecodeJSON(t *testing.T) {
 		resp, err := client.Get(context.Background(), "/test")
 		require.NoError(t, err)
 
-		var result map[string]interface{}
+		var result map[string]any
 		err = resp.DecodeJSON(&result)
 		assert.Error(t, err)
 	})

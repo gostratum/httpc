@@ -49,7 +49,7 @@ func TestClientHTTPMethods(t *testing.T) {
 		)
 		require.NoError(t, err)
 
-		body := map[string]interface{}{
+		body := map[string]any{
 			"name": "test",
 		}
 		resp, err := client.Post(context.Background(), "/users", body)
@@ -71,7 +71,7 @@ func TestClientHTTPMethods(t *testing.T) {
 		)
 		require.NoError(t, err)
 
-		body := map[string]interface{}{
+		body := map[string]any{
 			"name": "updated",
 		}
 		resp, err := client.Put(context.Background(), "/users/1", body)
@@ -92,7 +92,7 @@ func TestClientHTTPMethods(t *testing.T) {
 		)
 		require.NoError(t, err)
 
-		body := map[string]interface{}{
+		body := map[string]any{
 			"status": "active",
 		}
 		resp, err := client.Patch(context.Background(), "/users/1", body)
